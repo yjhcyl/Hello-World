@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>clip</title>
+    <style>
+      canvas {
+        margin:  20px 0 0 20px;
+        background: lightgray;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="420"></canvas>
+    <script>
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+      let radius = canvas.width / 2;
+      
+      canvas.addEventListener( 'click', e => {
+        e.preventDefault();
+        animate();
+      }, false)
+
+      function fillColor(color) {
+        context.save();
+        context.fillStyle = color;
+        context.fillRect( 0, 0, canvas.width, canvas.height);
+        context.restore();
+      }
+
+      function drawText(color) {
+        context.save();
+        context.font = '128pt Comic-sans';
+        context.shadowColor = 'rgba(100, 100, 150, 0.8)';
+        context.shadowOffsetX = 5;
+        context.shadowOffsetY = 5;
+        context.shadowBlur = 10;
+
+        context.fillStyle = 'cornflowerblue';
+        context.fillText('屈前磊', 20, 250); 
+        context.strokeStyle = 'yellow';
+        context.strokeText('屈前磊', 20, 250);
+        context.restore();
+      }
+
+      drawText();
+
+      function clip( radius ) {
+        context.save();
+        context.beginPath();
+        context.arc( 
+          canvas.width / 2, canvas.height / 2,
+          radius, 0, Math.PI / 180 * 2, true
+        );
+        context.clip();
+        fillColor( 'lightgray' );
+        drawText();
+        context.restore();
+      }
+
+      function animate() {
+        let loop = null;
+        loop = setInterval(() => {
+          radius -= canvas.width / 100;
+          fillColor( 'black' );
+          if ( radius > 0 ) {
+            clip( radius );
+          } else {
+            clearInterval( loop );
+            fillColor( 'lightgray' );
+            drawText();
+            radius = canvas.width / 2;
+          }
+        }, 16)
+      }
+      fillColor( 'lightgray' );
+      drawText();
+
+
+      const arr = [1,2];
+      arr.filter(item => {
+        console.log(this)
+      })
+    </script>
+  </body>
+</html>
